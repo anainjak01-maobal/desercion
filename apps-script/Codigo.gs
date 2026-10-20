@@ -4,7 +4,7 @@
    Después de cada cambio: Implementar > Administrar implementaciones > Versión nueva.
    Solo guarda códigos y números. No hay campos de texto libre, ni nombres, ni motivos.
    ============================================================ */
-var CLAVE = "cambia-esta-clave";
+var CLAVE = "Desercion12345";
 var HOJA = "Lista";
 var ZONA = "America/Bogota";
 var CABECERA = ["Código", "Faltas", "Materias bajo 3", "Vino la última semana", "Actualizado"];
