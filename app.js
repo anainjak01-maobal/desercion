@@ -55,6 +55,7 @@
   /* ---------- Navegación y acceso ---------- */
   var VISTAS = ["panel", "registrar", "registros"];
   function mostrar(vista) {
+    document.body.classList.toggle("en-panel", vista === "panel");
     VISTAS.forEach(function (v) { $("vista-" + v).hidden = v !== vista; });
     document.querySelectorAll("[data-vista]").forEach(function (b) {
       b.setAttribute("aria-current", b.dataset.vista === vista ? "page" : "false");
