@@ -1,0 +1,24 @@
+SISTEMA DE ANALÍTICA DE DATOS PARA LA DESERCIÓN ESCOLAR EN MAICAO
+Módulo: Lista temprana (seguimiento por código)
+I.E. N.º 6 Jorge Arrieta · Grado 9° · Ficha 3299150
+
+QUÉ ES
+Una página para que coordinación registre, por código, faltas, materias bajo 3,0 y si el estudiante vino la última semana. El panel muestra las categorías del paquete (llamada, semana en blanco, refuerzo, seguimiento y sin señal), la sensibilidad del umbral y la comparación con intervalos de confianza.
+
+QUÉ NO GUARDA
+- Nombres, motivos (transporte, trabajo, etc.) ni ningún texto libre. Solo código y números.
+- Los motivos quedan en coordinación.
+
+PASOS PARA PONERLA EN MARCHA
+1. Crea una hoja de Google nueva. Ponle un nombre como "Lista temprana".
+2. Importa apps-script/lista_inicial.csv como pestaña con nombre exacto "Lista".
+3. Extensiones > Apps Script. Pega el contenido de apps-script/Codigo.gs y cambia CLAVE.
+4. Implementar > Aplicación web. Ejecutar como: Yo. Acceso: Cualquier persona. Copia la dirección /exec.
+5. Pega esa dirección en config.js, en REGISTRO.
+6. Sube a GitHub: index.html, app.css, app.js y config.js.
+7. Después de cambiar el código: Implementar > Administrar implementaciones > Versión nueva.
+
+ANTES DE USARLA CON DATOS ACTUALES
+- Actualizar la asistencia de la última semana (el corte es de agosto de 2026).
+- Autorización escrita del coordinador (el permiso verbal no basta para guardar datos de menores).
+- Compartir la hoja solo con quien la administra. Usar una clave larga.

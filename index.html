@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Sistema de Analítica de Datos para la Deserción Escolar en Maicao</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,600;6..72,700&family=Public+Sans:wght@400;600;700&display=swap"/>
+<link rel="stylesheet" href="app.css?v=1"/>
+</head>
+<body>
+
+<header class="cabecera">
+  <div class="wrap">
+    <p class="kicker">Sistema de Analítica de Datos para la Deserción Escolar en Maicao · uso interno</p>
+    <h1 id="titulo">Entrar</h1>
+    <p class="muted" id="subtitulo">Grado 9°, un grupo. Faltas del 13 de julio al 7 de agosto de 2026. Solo códigos y números.</p>
+    <nav class="acciones" id="barra" hidden>
+      <button class="btn" type="button" data-vista="panel">Panel</button>
+      <button class="btn" type="button" data-vista="registrar">Registrar</button>
+      <button class="btn" type="button" data-vista="registros">Registros</button>
+      <button class="btn" type="button" id="salir">Salir</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+<section id="vista-acceso" class="panel acceso">
+  <form id="acc-form" autocomplete="off">
+    <label class="campo">Clave del equipo
+      <input type="password" id="clave" required/>
+    </label>
+    <div class="acciones"><button class="btn primario" type="submit" id="acc-btn">Entrar</button></div>
+    <p class="msg" id="acc-msg" role="status"></p>
+  </form>
+</section>
+
+<section id="vista-panel" hidden>
+
+  <section class="bloque">
+    <div class="encabezado"><h2>El grupo, estudiante por estudiante</h2>
+      <p>Cada cuadro es un código. El color indica en qué categoría cayó. Pasa el cursor para ver sus números, o toca un cuadro para ir a su fila en la lista.</p></div>
+    <div class="panel mapa" id="mapa"></div>
+    <div class="leyenda-cat" id="leyenda-cat"></div>
+  </section>
+
+  <section class="bloque">
+    <div class="panel umbral">
+      <label class="campo">Umbral de faltas para la señal
+        <select id="umbral">
+          <option value="5">5 faltas</option>
+          <option value="6" selected>6 faltas (el del equipo)</option>
+          <option value="7">7 faltas</option>
+        </select>
+      </label>
+      <p class="muted">El umbral cambia la lista. El equipo lo eligió y no está validado con casos reales.</p>
+    </div>
+    <div class="kpis" id="kpis"></div>
+  </section>
+
+  <section class="bloque">
+    <div class="encabezado"><h2>Qué cambia con el umbral</h2>
+      <p>Esta tabla muestra cuántos códigos caen en cada categoría con 5, 6 y 7 faltas. Sirve para ver qué tan sensible es la lista.</p></div>
+    <div class="tabla-wrap"><table class="tabla" id="tabla-umbral"></table></div>
+  </section>
+
+  <section class="bloque">
+    <div class="encabezado"><h2>Semana en blanco y señales</h2>
+      <p>Quien no vino la última semana se mira siempre, tenga o no señales. Aquí se compara la proporción de quienes no vinieron entre quienes tienen dos señales y quienes no. El intervalo del 95 % muestra la incertidumbre.</p></div>
+    <div class="tabla-wrap" id="cruce"></div>
+    <p class="nota" id="cruce-nota"></p>
+  </section>
+
+  <section class="bloque">
+    <div class="encabezado"><h2>Listas por categoría</h2>
+      <p>Solo códigos. Una señal no es un diagnóstico ni una decisión sobre el estudiante: es un aviso para que coordinación verifique.</p></div>
+    <div id="listas"></div>
+  </section>
+
+  <section class="bloque">
+    <div class="encabezado"><h2>Lo que este panel no puede afirmar</h2></div>
+    <ul class="limites">
+      <li>El corte es de agosto de 2026. Antes de llamar, hay que actualizar la asistencia de la última semana.</li>
+      <li>La regla de dos señales no está validada con casos reales. Sirve para avisar, no para adivinar.</li>
+      <li>Faltar seguido y perder materias van juntos en estos datos, pero eso no prueba que una cosa cause la otra.</li>
+      <li>Un código sin señal no quiere decir que todo esté bien. Quien falta sin dejar señal también se mira en la semana en blanco.</li>
+      <li>Los motivos que el docente anotó no están en esta app. Viven en coordinación.</li>
+    </ul>
+  </section>
+</section>
+
+<section id="vista-registrar" hidden>
+  <div class="encabezado"><h2>Registrar o actualizar un código</h2>
+    <p>Escribe el código del estudiante y sus números. Si el código ya existe, se actualiza. No hay campos de texto: no se guardan nombres ni motivos.</p></div>
+  <form id="r-form" class="panel formulario" autocomplete="off">
+    <div class="rejilla">
+      <label class="campo">Código <input type="text" id="r-codigo" maxlength="8" placeholder="Ej. D11" required/></label>
+      <label class="campo">Faltas en 4 semanas <input type="number" id="r-faltas" min="0" max="60" step="1" required/></label>
+      <label class="campo">Materias bajo 3,0 <input type="number" id="r-materias" min="0" max="9" step="1" required/></label>
+      <label class="campo">¿Vino la última semana? <select id="r-vino"><option>Sí</option><option>No</option></select></label>
+    </div>
+    <div class="acciones">
+      <button class="btn primario" type="submit" id="r-guardar">Guardar código</button>
+      <button class="btn" type="button" id="r-limpiar">Limpiar</button>
+      <p class="msg" id="r-msg" role="status"></p>
+    </div>
+  </form>
+</section>
+
+<section id="vista-registros" hidden>
+  <div class="encabezado"><h2>Registros</h2><p id="g-resumen"></p></div>
+  <p class="msg" id="g-msg" role="status"></p>
+  <div class="tabla-wrap"><table class="tabla">
+    <thead><tr><th>Código</th><th class="n">Faltas</th><th class="n">Materias bajo 3,0</th><th>Vino la última semana</th><th></th></tr></thead>
+    <tbody id="tbody-registros"></tbody>
+  </table></div>
+</section>
+
+<p class="pie">Datos de coordinación. Solo códigos y números. Uso interno.</p>
+</main>
+
+<script src="config.js?v=1"></script>
+<script src="app.js?v=1"></script>
+</body>
+</html>
