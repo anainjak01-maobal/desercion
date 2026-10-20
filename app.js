@@ -2,6 +2,7 @@
   "use strict";
   var CFG = window.LT_CONFIG || {};
   var clave = "", datos = [], umbral = 6;
+  var NOMBRE_RE = /^[A-Za-zÀ-ÿ' .\-]{3,60}$/;
   var CATS = {
     llamada: { t: "Llamada", c: "c-llamada" },
     blanca: { t: "Semana en blanco", c: "c-blanca" },
@@ -19,6 +20,7 @@
   function msg(el, t, tipo) { el.textContent = t; el.className = "msg" + (tipo ? " " + tipo : ""); }
   function pct(x) { return x == null ? "—" : Math.round(x * 100) + " %"; }
   function ordenar(a) { return a.slice().sort(function (x, y) { return x.codigo < y.codigo ? -1 : x.codigo > y.codigo ? 1 : 0; }); }
+  function etiqueta(d) { return d.nombre || d.codigo; }
 
   function enviar(accion, extra) {
     if (!CFG.REGISTRO) return Promise.resolve({ ok: false, error: "Falta la dirección del registro en config.js." });
@@ -94,7 +96,10 @@
     return enviar("listar").then(function (r) {
       if (!r.ok) { msg($("g-msg"), r.error || "No pude cargar los datos.", "error"); return; }
       datos = (r.datos || []).map(function (d) {
-        return { codigo: d.codigo, faltas: Number(d.faltas) || 0, materias: Number(d.materias) || 0, vino: d.vino };
+        return {
+          codigo: d.codigo, nombre: d.nombre || "", grado: Number(d.grado) || 0,
+          faltas: Number(d.faltas) || 0, materias: Number(d.materias) || 0, vino: d.vino
+        };
       });
       pintarPanel();
       pintarRegistros();
@@ -104,7 +109,8 @@
   /* ---------- Panel ---------- */
   function pintarPanel() {
     if (!datos.length) {
-      ["mapa", "leyenda-cat", "kpis", "tabla-umbral", "cruce", "listas"].forEach(function (id) { $(id).innerHTML = ""; });
+      ["leyenda-cat", "kpis", "tabla-umbral", "cruce", "listas"].forEach(function (id) { $(id).innerHTML = ""; });
+      $("mapa").innerHTML = '<p class="vacio-mapa">Todavía no hay registros. Revisa que la hoja tenga una pestaña llamada "Lista" con los estudiantes, y que config.js tenga la dirección del Apps Script.</p>';
       $("cruce-nota").textContent = "";
       msg($("g-msg"), "Todavía no hay registros.");
       return;
@@ -115,7 +121,7 @@
 
     $("mapa").innerHTML = rs.map(function (d, i) {
       var k = categoria(d, umbral);
-      return '<button type="button" class="cuadro ' + CATS[k].c + '" data-codigo="' + esc(d.codigo) + '" style="--d:' + (i * 25) + 'ms" aria-label="' + esc(d.codigo) + ", " + CATS[k].t + '">' + esc(d.codigo) + "</button>";
+      return '<button type="button" class="cuadro ' + CATS[k].c + '" data-codigo="' + esc(d.codigo) + '" style="--d:' + (i * 25) + 'ms" aria-label="' + esc(etiqueta(d)) + ", " + CATS[k].t + '">' + esc(d.codigo) + "</button>";
     }).join("");
     $("leyenda-cat").innerHTML = Object.keys(CATS).map(function (k) {
       return '<span><i class="sw ' + CATS[k].c + '"></i>' + CATS[k].t + " · " + cuenta[k] + "</span>";
@@ -161,7 +167,8 @@
       var items = rs.filter(function (d) { return categoria(d, umbral) === L.k; });
       return '<section class="panel lista"><header><h3>' + L.t + " · " + items.length + "</h3><p>" + L.d + "</p></header>" +
         (items.length ? "<ul>" + items.map(function (d) {
-          return '<li id="fila-' + esc(d.codigo) + '"><strong>' + esc(d.codigo) + "</strong><span class=\"muted\">" + d.faltas + " faltas · " + d.materias + " materias bajo 3,0</span></li>";
+          return '<li id="fila-' + esc(d.codigo) + '"><strong>' + esc(etiqueta(d)) + '</strong><span class="muted">' + esc(d.codigo) +
+            (d.grado ? " · " + d.grado + "°" : "") + " · " + d.faltas + " faltas · " + d.materias + " materias bajo 3,0</span></li>";
         }).join("") + "</ul>" : '<p class="vacio">Ninguno con este umbral.</p>') + "</section>";
     }).join("") + "</div>";
   }
@@ -176,7 +183,7 @@
     $("mapa").classList.add("con-foco");
     b.classList.add("activo");
     if (!tip) { tip = document.createElement("div"); tip.className = "tip"; document.body.appendChild(tip); }
-    tip.textContent = d.codigo + " · " + CATS[categoria(d, umbral)].t + " · " + d.faltas + " faltas · " + d.materias +
+    tip.textContent = etiqueta(d) + " · " + (d.grado ? d.grado + "° · " : "") + CATS[categoria(d, umbral)].t + " · " + d.faltas + " faltas · " + d.materias +
       " materias bajo 3,0 · " + (d.vino === "Sí" ? "vino" : "no vino") + " la última semana";
     tip.style.display = "block";
   });
@@ -193,7 +200,7 @@
     var b = e.target.closest(".cuadro");
     if (!b) return;
     var fila = document.getElementById("fila-" + b.dataset.codigo);
-    if (!fila) { msg($("g-msg"), "Ese código está en la categoría sin señal: no tiene fila en las listas."); return; }
+    if (!fila) { msg($("g-msg"), "Ese estudiante está en la categoría sin señal: no tiene fila en las listas."); return; }
     fila.scrollIntoView({ behavior: "smooth", block: "center" });
     fila.classList.add("resaltada");
     setTimeout(function () { fila.classList.remove("resaltada"); }, 1600);
@@ -202,6 +209,7 @@
   /* ---------- Registrar ---------- */
   function limpiarFormulario() {
     $("r-codigo").value = ""; $("r-codigo").disabled = false;
+    $("r-nombre").value = ""; $("r-grado").selectedIndex = 0;
     $("r-faltas").value = ""; $("r-materias").value = ""; $("r-vino").selectedIndex = 0;
     msg($("r-msg"), "");
   }
@@ -209,10 +217,12 @@
   $("r-form").addEventListener("submit", function (e) {
     e.preventDefault();
     var f = {
-      codigo: $("r-codigo").value.trim(), faltas: $("r-faltas").value.trim(),
-      materias: $("r-materias").value.trim(), vino: $("r-vino").value
+      codigo: $("r-codigo").value.trim(), nombre: $("r-nombre").value.trim(), grado: $("r-grado").value,
+      faltas: $("r-faltas").value.trim(), materias: $("r-materias").value.trim(), vino: $("r-vino").value
     };
     if (!/^[A-Za-z0-9]{2,8}$/.test(f.codigo)) { msg($("r-msg"), "El código debe tener de 2 a 8 letras o números.", "error"); return; }
+    if (!NOMBRE_RE.test(f.nombre)) { msg($("r-msg"), "El nombre debe tener de 3 a 60 letras (se permiten tildes, ñ, espacios, guion y punto).", "error"); return; }
+    if (!/^(6|7|8|9|10|11)$/.test(f.grado)) { msg($("r-msg"), "Elige el grado.", "error"); return; }
     if (!/^\d{1,2}$/.test(f.faltas) || Number(f.faltas) > 60) { msg($("r-msg"), "Las faltas deben ser un número entero entre 0 y 60.", "error"); return; }
     if (!/^\d$/.test(f.materias)) { msg($("r-msg"), "Las materias bajo 3,0 deben ser un número entero entre 0 y 9.", "error"); return; }
     $("r-guardar").disabled = true; msg($("r-msg"), "Guardando…");
@@ -228,12 +238,13 @@
   /* ---------- Registros ---------- */
   function pintarRegistros() {
     var rs = ordenar(datos);
-    $("g-resumen").textContent = rs.length + " códigos registrados. Editar o quitar cambia el panel.";
+    $("g-resumen").textContent = rs.length + " estudiantes registrados. Editar o quitar cambia el panel.";
     $("tbody-registros").innerHTML = rs.length ? rs.map(function (d) {
-      return "<tr><td>" + esc(d.codigo) + '</td><td class="n">' + d.faltas + '</td><td class="n">' + d.materias + "</td><td>" + esc(d.vino) +
+      return "<tr><td>" + esc(d.codigo) + "</td><td>" + esc(d.nombre) + '</td><td class="n">' + (d.grado || "") + '</td><td class="n">' + d.faltas +
+        '</td><td class="n">' + d.materias + "</td><td>" + esc(d.vino) +
         '</td><td><button class="btn pequeno" type="button" data-accion="editar" data-codigo="' + esc(d.codigo) + '">Editar</button> ' +
         '<button class="btn pequeno peligro" type="button" data-accion="quitar" data-codigo="' + esc(d.codigo) + '">Quitar</button></td></tr>';
-    }).join("") : '<tr><td colspan="5" class="muted">Todavía no hay registros.</td></tr>';
+    }).join("") : '<tr><td colspan="7" class="muted">Todavía no hay registros.</td></tr>';
   }
   $("tbody-registros").addEventListener("click", function (e) {
     var b = e.target.closest("button[data-accion]");
@@ -242,14 +253,15 @@
     if (!d) return;
     if (b.dataset.accion === "editar") {
       $("r-codigo").value = d.codigo; $("r-codigo").disabled = true;
+      $("r-nombre").value = d.nombre; $("r-grado").value = d.grado ? String(d.grado) : "";
       $("r-faltas").value = d.faltas; $("r-materias").value = d.materias; $("r-vino").value = d.vino;
       msg($("r-msg"), ""); mostrar("registrar");
       return;
     }
-    if (!confirm("¿Quitar el código " + d.codigo + " de la lista?")) return;
+    if (!confirm("¿Quitar a " + etiqueta(d) + " (" + d.codigo + ") de la lista?")) return;
     enviar("borrar", { codigo: d.codigo }).then(function (r) {
       if (!r.ok) { msg($("g-msg"), r.error || "No se pudo quitar.", "error"); return; }
-      cargarTodo().then(function () { msg($("g-msg"), "Código " + d.codigo + " quitado.", "ok"); });
+      cargarTodo().then(function () { msg($("g-msg"), "Quitado: " + etiqueta(d) + ".", "ok"); });
     });
   });
 })();

@@ -6,7 +6,7 @@
 <title>Sistema de Analítica de Datos para la Deserción Escolar en Maicao</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,600;6..72,700&family=Public+Sans:wght@400;600;700&display=swap"/>
-<link rel="stylesheet" href="app.css?v=1"/>
+<link rel="stylesheet" href="app.css?v=3"/>
 </head>
 <body>
 
@@ -14,7 +14,7 @@
   <div class="wrap">
     <p class="kicker">Sistema de Analítica de Datos para la Deserción Escolar en Maicao · uso interno</p>
     <h1 id="titulo">Entrar</h1>
-    <p class="muted" id="subtitulo">Grado 9°, un grupo. Faltas del 13 de julio al 7 de agosto de 2026. Solo códigos y números.</p>
+    <p class="muted" id="subtitulo">Grado 9°, un grupo. Faltas del 13 de julio al 7 de agosto de 2026.</p>
     <nav class="acciones" id="barra" hidden>
       <button class="btn" type="button" data-vista="panel">Panel</button>
       <button class="btn" type="button" data-vista="registrar">Registrar</button>
@@ -40,7 +40,7 @@
 
   <section class="bloque">
     <div class="encabezado"><h2>El grupo, estudiante por estudiante</h2>
-      <p>Cada cuadro es un código. El color indica en qué categoría cayó. Pasa el cursor para ver sus números, o toca un cuadro para ir a su fila en la lista.</p></div>
+      <p>Cada cuadro es un estudiante, con su código. El color indica en qué categoría cayó. Pasa el cursor para ver sus datos, o toca un cuadro para ir a su fila en la lista.</p></div>
     <div class="panel mapa" id="mapa"></div>
     <div class="leyenda-cat" id="leyenda-cat"></div>
   </section>
@@ -74,7 +74,7 @@
 
   <section class="bloque">
     <div class="encabezado"><h2>Listas por categoría</h2>
-      <p>Solo códigos. Una señal no es un diagnóstico ni una decisión sobre el estudiante: es un aviso para que coordinación verifique.</p></div>
+      <p>Nombre, grado y números. Una señal no es un diagnóstico ni una decisión sobre el estudiante: es un aviso para que coordinación verifique.</p></div>
     <div id="listas"></div>
   </section>
 
@@ -92,10 +92,12 @@
 
 <section id="vista-registrar" hidden>
   <div class="encabezado"><h2>Registrar o actualizar un código</h2>
-    <p>Escribe el código del estudiante y sus números. Si el código ya existe, se actualiza. No hay campos de texto: no se guardan nombres ni motivos.</p></div>
+    <p>Escribe el código, el nombre y el grado del estudiante, y sus números. Si el código ya existe, se actualiza. No se guardan motivos ni teléfonos.</p></div>
   <form id="r-form" class="panel formulario" autocomplete="off">
     <div class="rejilla">
       <label class="campo">Código <input type="text" id="r-codigo" maxlength="8" placeholder="Ej. D11" required/></label>
+      <label class="campo">Nombre completo <input type="text" id="r-nombre" maxlength="60" placeholder="Ej. María Pérez Gómez" required/></label>
+      <label class="campo">Grado <select id="r-grado" required><option value="">Elige</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option></select></label>
       <label class="campo">Faltas en 4 semanas <input type="number" id="r-faltas" min="0" max="60" step="1" required/></label>
       <label class="campo">Materias bajo 3,0 <input type="number" id="r-materias" min="0" max="9" step="1" required/></label>
       <label class="campo">¿Vino la última semana? <select id="r-vino"><option>Sí</option><option>No</option></select></label>
@@ -112,15 +114,15 @@
   <div class="encabezado"><h2>Registros</h2><p id="g-resumen"></p></div>
   <p class="msg" id="g-msg" role="status"></p>
   <div class="tabla-wrap"><table class="tabla">
-    <thead><tr><th>Código</th><th class="n">Faltas</th><th class="n">Materias bajo 3,0</th><th>Vino la última semana</th><th></th></tr></thead>
+    <thead><tr><th>Código</th><th>Nombre</th><th class="n">Grado</th><th class="n">Faltas</th><th class="n">Materias bajo 3,0</th><th>Vino la última semana</th><th></th></tr></thead>
     <tbody id="tbody-registros"></tbody>
   </table></div>
 </section>
 
-<p class="pie">Datos de coordinación. Solo códigos y números. Uso interno.</p>
+<p class="pie">Datos de coordinación. Uso interno: equipo y administrativos.</p>
 </main>
 
 <script src="config.js?v=1"></script>
-<script src="app.js?v=1"></script>
+<script src="app.js?v=3"></script>
 </body>
 </html>

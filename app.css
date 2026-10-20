@@ -62,6 +62,7 @@ input:focus, select:focus { border-color:var(--bosque); outline:none; box-shadow
 .leyenda-cat { display:flex; flex-wrap:wrap; gap:8px 18px; margin-top:14px; font-size:14px; color:var(--tinta2); }
 .leyenda-cat span { display:inline-flex; align-items:center; gap:8px; }
 .sw { width:14px; height:14px; border-radius:4px; display:inline-block; }
+.vacio-mapa { margin:0; color:var(--tinta2); font-size:15px; }
 .tip { position:fixed; pointer-events:none; z-index:5; background:var(--tinta); color:#fff; font-size:13px; padding:8px 12px; border-radius:10px; max-width:270px; }
 
 /* ---------- Números ---------- */
