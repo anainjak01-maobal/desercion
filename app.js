@@ -76,6 +76,7 @@
       if (!r.ok) { clave = ""; msg($("acc-msg"), r.error || "Clave incorrecta.", "error"); return; }
       $("clave").value = "";
       $("vista-acceso").hidden = true;
+      $("inicio").hidden = true;
       $("barra").hidden = false;
       $("titulo").textContent = "Lista temprana del grupo";
       limpiarFormulario();
@@ -87,9 +88,11 @@
     VISTAS.forEach(function (v) { $("vista-" + v).hidden = true; });
     $("barra").hidden = true;
     $("vista-acceso").hidden = false;
+    $("inicio").hidden = false;
     $("titulo").textContent = "Entrar";
     msg($("acc-msg"), "");
   });
+  $("ir-acceso").addEventListener("click", function () { setTimeout(function () { $("clave").focus(); }, 400); });
   $("umbral").addEventListener("change", function () { umbral = Number($("umbral").value); pintarPanel(); });
 
   function cargarTodo() {
