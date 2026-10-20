@@ -6,7 +6,7 @@
 <title>Sistema de Analítica de Datos para la Deserción Escolar en Maicao</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,600;6..72,700&family=Public+Sans:wght@400;600;700&display=swap"/>
-<link rel="stylesheet" href="app.css?v=3"/>
+<link rel="stylesheet" href="app.css?v=4"/>
 </head>
 <body>
 
@@ -46,6 +46,22 @@
   </section>
 
   <section class="bloque">
+    <div class="encabezado"><h2>Qué significa cada color y qué hacer</h2>
+      <p>Cada cuadro cae en una sola categoría según sus faltas, sus materias bajo 3,0 y si vino la última semana. Esta tabla dice qué hacer en cada caso.</p></div>
+    <div class="tabla-wrap"><table class="tabla">
+      <thead><tr><th>Color</th><th>Qué significa</th><th>Qué hacer</th></tr></thead>
+      <tbody>
+        <tr><td><i class="sw c-llamada"></i> Llamada</td><td>Vino, faltó seguido y pierde dos o más materias.</td><td>Coordinación verifica y llama al acudiente. Se anota qué se hizo.</td></tr>
+        <tr><td><i class="sw c-blanca"></i> Semana en blanco</td><td>No vino la última semana.</td><td>Coordinación averigua por qué (salud, transporte, trabajo, familia), tenga o no otras señales.</td></tr>
+        <tr><td><i class="sw c-refuerzo"></i> Refuerzo</td><td>Vino y pierde dos o más materias, pero faltó poco.</td><td>Refuerzo académico con los docentes de esas materias. No es una etiqueta.</td></tr>
+        <tr><td><i class="sw c-seguimiento"></i> Seguimiento</td><td>Faltó seguido, pero vino y pasa sus materias.</td><td>Acompañamiento con el director de grupo. No es una llamada de deserción.</td></tr>
+        <tr><td><i class="sw c-sin"></i> Sin señal</td><td>Vino y no cumple ninguna señal.</td><td>Nada especial. Se revisa de nuevo con la siguiente actualización.</td></tr>
+      </tbody>
+    </table></div>
+    <p class="nota">Si un cuadro no coincide con lo que sabes del estudiante, revisa primero el dato en la hoja. El panel solo muestra lo que se registró.</p>
+  </section>
+
+  <section class="bloque">
     <div class="panel umbral">
       <label class="campo">Umbral de faltas para la señal
         <select id="umbral">
@@ -76,6 +92,20 @@
     <div class="encabezado"><h2>Listas por categoría</h2>
       <p>Nombre, grado y números. Una señal no es un diagnóstico ni una decisión sobre el estudiante: es un aviso para que coordinación verifique.</p></div>
     <div id="listas"></div>
+  </section>
+
+  <section class="bloque">
+    <div class="encabezado"><h2>Para qué sirve la analítica aquí</h2>
+      <p>La app no existe para etiquetar estudiantes. Existe para usar los datos con cuidado y decidir mejor. Estos son los pasos que el equipo recorre:</p></div>
+    <ol class="limites">
+      <li><strong>Preguntar.</strong> ¿Qué estudiantes necesitan atención antes de que dejen de venir?</li>
+      <li><strong>Reunir datos.</strong> Faltas, materias bajo 3,0 y asistencia de la última semana, siempre por código.</li>
+      <li><strong>Revisar la calidad.</strong> ¿Los números son recientes? ¿Alguien se registró dos veces? ¿Hay valores imposibles?</li>
+      <li><strong>Analizar.</strong> Contar, comparar, calcular porcentajes y mirar la incertidumbre. Con pocos casos, los resultados son frágiles.</li>
+      <li><strong>Decidir y actuar.</strong> Llamar, reforzar o acompañar, como dice la tabla de arriba.</li>
+      <li><strong>Revisar si funcionó.</strong> ¿Los estudiantes llamados volvieron? ¿La regla sirve o hay que cambiarla?</li>
+    </ol>
+    <p class="nota">Lo que se busca es aprender a pasar de un número a una decisión responsable: verificar antes de actuar, no confundir correlación con causa y reconocer lo que los datos no pueden decir.</p>
   </section>
 
   <section class="bloque">
@@ -123,6 +153,6 @@
 </main>
 
 <script src="config.js?v=1"></script>
-<script src="app.js?v=3"></script>
+<script src="app.js?v=4"></script>
 </body>
 </html>
