@@ -176,3 +176,15 @@ body { overflow-x:clip; }
 .lista li:hover { transform:translateX(4px); }
 .leyenda-cat span { transition:transform .2s var(--ease); }
 .leyenda-cat span:hover { transform:translateY(-2px); }
+
+/* ---------- Encabezado sobre la banda (solo computador, con sesión) ---------- */
+@media (min-width:821px) {
+  body.logueado .cabecera { position:absolute; top:0; left:0; right:0; z-index:3; background:transparent; border-bottom:0; margin:0; padding-top:44px; }
+  body.logueado .cabecera .kicker { color:var(--salvia); }
+  body.logueado .cabecera h1 { color:#f3eee2; }
+  body.logueado .cabecera .muted { color:#c9d3c9; }
+  body.logueado .cabecera .btn { background:transparent; border-color:rgba(243,238,226,.45); color:#f3eee2; }
+  body.logueado .cabecera .btn:hover { border-color:#f3eee2; background:rgba(243,238,226,.12); }
+  body.logueado .cabecera .btn[aria-current="page"] { background:#f3eee2; border-color:#f3eee2; color:#14231c; }
+  body.logueado .banda { margin-top:0; }
+}

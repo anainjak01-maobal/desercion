@@ -76,6 +76,7 @@
       if (!r.ok) { clave = ""; msg($("acc-msg"), r.error || "Clave incorrecta.", "error"); return; }
       $("clave").value = "";
       $("vista-acceso").hidden = true;
+      document.body.classList.add("logueado");
       $("inicio").hidden = true;
       $("barra").hidden = false;
       $("titulo").textContent = "Lista temprana del grupo";
@@ -88,6 +89,7 @@
     VISTAS.forEach(function (v) { $("vista-" + v).hidden = true; });
     $("barra").hidden = true;
     $("vista-acceso").hidden = false;
+    document.body.classList.remove("logueado");
     $("inicio").hidden = false;
     $("titulo").textContent = "Entrar";
     msg($("acc-msg"), "");
